@@ -24,11 +24,11 @@ object main extends App {
   //
   // PARAMETRES
   // Le nombre de pas max (plus de pas = plus de détails mais plus de temps)
-  val MarchCount: Float = 200
+  val MarchCount: Float = 400
   //Le modele 3D que vous voulez rendre (Sphere, Torus, Capsule)
   val model: RenderType = InfiniteSpheres
   //La résolution
-  val resolution: (Int, Int) = (512, 512)
+  val resolution: (Int, Int) = (2048, 2048)
   //Le champ de vue (field of view ou FoV)
   val FoV: Float = 90
   
@@ -52,8 +52,8 @@ object main extends App {
     
     //This prepare everything so that we can get the ray direction easily    
     val aspectRatio: Float = X.toFloat/Y.toFloat
-    val cameraPos: Vector3 = new Vector3(90, -90, 90)
-    
+    //val cameraPos: Vector3 = new Vector3(90, -90, 90)
+    val cameraPos: Vector3 = new Vector3(0, 0, 90)
     
     
     //For each pixel we run the recursive function.
@@ -66,7 +66,7 @@ object main extends App {
         val pX: Float = (2f * ((x + 0.5f) / X) -1f) * Math.tan(FieldOfView/2*Math.PI/180).toFloat * aspectRatio
         val pY: Float = (1f - 2f * ((y + 0.5f) / Y)) * Math.tan(FieldOfView/2*Math.PI/180).toFloat
         
-        val rayDirection: Vector3 = (new Vector3(pX.toFloat, pY.toFloat, -1)).normalize.rotate(Quaternion.forEuler(new Vector3(Math.PI.toFloat/4f, 0, Math.PI.toFloat/4f)))
+        val rayDirection: Vector3 = (new Vector3(pX.toFloat, pY.toFloat, -1)).normalize.rotate(Quaternion.forEuler(new Vector3(Math.PI.toFloat/4f, 0, 3*Math.PI.toFloat/4f)))
                                                                                          
         
         
@@ -143,7 +143,7 @@ object main extends App {
         case true => {
           (count, distance + md)
         }
-        case false => rayMarching(origin + (direction.normalize * md.toFloat), direction, count + 1, distance+md)
+        case false => rayMarching(origin + (direction.normalize * md.toFloat), direction.normalize, count + 1, distance+md)
       }
     }
   }
@@ -201,8 +201,8 @@ object main extends App {
   var IRadius: Float = 10
   var IspherePos: Vector3 = Vector3.fill(0)
   
-  //Get the max distance from a sphere
-  def ISphere(p: Vector3): Float = (new Vector3(p.x%30.0f, p.y%30.0f, p.z)-IspherePos).magnitude-IRadius
+  //Get the max distance from a sphere (modulo used to "repeat" space, shifted because it made all spheres cut in half
+  def ISphere(p: Vector3): Float = (new Vector3(p.x%30.0f + 15, p.y%30.0f + 15, p.z)-IspherePos).magnitude-IRadius
   
   //
   //TORUS
