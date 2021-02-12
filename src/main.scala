@@ -28,7 +28,7 @@ object main extends App {
   //Le modele 3D que vous voulez rendre (Sphere, Torus, Capsule)
   val model: RenderType = InfiniteSpheres
   //La résolution
-  val resolution: (Int, Int) = (2048, 2048)
+  val resolution: (Int, Int) = (1280, 720)
   //Le champ de vue (field of view ou FoV)
   val FoV: Float = 90
   
@@ -202,7 +202,7 @@ object main extends App {
   var IspherePos: Vector3 = Vector3.fill(0)
   
   //Get the max distance from a sphere (modulo used to "repeat" space, shifted because it made all spheres cut in half
-  def ISphere(p: Vector3): Float = (new Vector3(p.x%30.0f + 15, p.y%30.0f + 15, p.z)-IspherePos).magnitude-IRadius
+  def ISphere(p: Vector3): Float = (new Vector3(-Math.abs(p.x)%30.0f + 15, -Math.abs(p.y)%30.0f + 15, p.z)-IspherePos).magnitude-IRadius
   
   //
   //TORUS
